@@ -13,15 +13,15 @@ public class GameManager : MonoBehaviour {
 
     public GameObject startPage;
     public GameObject gameOverPage;
-    public GameObject countDownPage;
+    public GameObject countdownPage;
     public Text scoreText;
 
     enum PageState
     {
         None,
         Start,
-        GameOver,
-        CountDown
+        Countdown,
+        GameOver
     }
 
     int score = 0;
@@ -72,37 +72,38 @@ public class GameManager : MonoBehaviour {
             case PageState.None:
                 startPage.SetActive(false);
                 gameOverPage.SetActive(false);
-                countDownPage.SetActive(false);
+                countdownPage.SetActive(false);
                 break;
             case PageState.Start:
                 startPage.SetActive(true);
                 gameOverPage.SetActive(false);
-                countDownPage.SetActive(false);
+                countdownPage.SetActive(false);
                 break;
             case PageState.GameOver:
                 startPage.SetActive(false);
                 gameOverPage.SetActive(true);
-                countDownPage.SetActive(false);
+                countdownPage.SetActive(false);
                 break;
-            case PageState.CountDown:
+            case PageState.Countdown:
                 startPage.SetActive(false);
                 gameOverPage.SetActive(false);
-                countDownPage.SetActive(true);
+                countdownPage.SetActive(true);
                 break;
-
         }
     }
 
     public void ConfirmGameOver() {
-        //activated on replay button
         OnGameOverConfirmed(); //event sent to TapController
         scoreText.text = "0";
         SetPageState(PageState.Start);
+
+        //activated on replay button
+        
     }
 
     public void StartGame() {
         //activated on play button
-        SetPageState(PageState.CountDown);
+        SetPageState(PageState.Countdown);
     }
 }
 

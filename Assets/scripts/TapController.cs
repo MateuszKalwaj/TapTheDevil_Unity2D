@@ -13,12 +13,13 @@ public class TapController : MonoBehaviour {
     public float tiltSmooth = 5;
     public Vector3 startPos;
 
-    new Rigidbody2D rigidbody;
+    Rigidbody2D myRigidbody;
     Quaternion downRotation;
     Quaternion forwardRotation;
 
+
     void Start() {
-        rigidbody = GetComponent<Rigidbody2D>();
+        myRigidbody = GetComponent<Rigidbody2D>();
         downRotation = Quaternion.Euler(0, 0, -90);
         forwardRotation = Quaternion.Euler(0, 0, 35);
     }
@@ -34,8 +35,8 @@ public class TapController : MonoBehaviour {
     }
 
     void OnGameStarted() {
-        rigidbody.velocity = Vector3.zero;
-        rigidbody.simulated = true;
+        myRigidbody.velocity = Vector3.zero;
+        myRigidbody.simulated = true;
     }
 
     void OnGameOverConfirmed() {
@@ -48,8 +49,8 @@ public class TapController : MonoBehaviour {
         if (Input.GetMouseButtonDown(0))
         {
             transform.rotation = forwardRotation;
-            rigidbody.velocity = Vector3.zero;
-            rigidbody.AddForce(Vector2.up * tapForce, ForceMode2D.Force);
+            myRigidbody.velocity = Vector3.zero;
+            myRigidbody.AddForce(Vector2.up * tapForce, ForceMode2D.Force);
         }
 
         transform.rotation = Quaternion.Lerp(transform.rotation, downRotation, tiltSmooth * Time.deltaTime);
@@ -65,7 +66,7 @@ public class TapController : MonoBehaviour {
         }
 
         if (col.gameObject.tag == "DeadZone") {
-            rigidbody.simulated = false;
+            myRigidbody.simulated = false;
             OnPlayerDied(); //event sent to GameManager
             //register a score event
             //play a sound
