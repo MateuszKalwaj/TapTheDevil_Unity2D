@@ -17,11 +17,14 @@ public class TapController : MonoBehaviour {
     Quaternion downRotation;
     Quaternion forwardRotation;
 
+    GameManager game;
+
 
     void Start() {
         myRigidbody = GetComponent<Rigidbody2D>();
         downRotation = Quaternion.Euler(0, 0, -90);
         forwardRotation = Quaternion.Euler(0, 0, 35);
+        game = GameManager.Instance;
     }
 
     private void OnEnable() {
@@ -46,6 +49,7 @@ public class TapController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        if (game.GameOver) return;
         if (Input.GetMouseButtonDown(0))
         {
             transform.rotation = forwardRotation;
