@@ -14,8 +14,8 @@ public class Parallaxer : MonoBehaviour {
 
     [System.Serializable]
     public struct YSpawnRange {
-        public float min;
-        public float max;
+        public float minY;
+        public float maxY;
     }
 
     public GameObject Prefab;
@@ -23,7 +23,7 @@ public class Parallaxer : MonoBehaviour {
     public float shiftSpeed;
     public float spawnRate;
 
-   // public YSpawnRange YSpawnRange;
+    public YSpawnRange myYSpawnRange;
     public Vector3 defaultSpawnPos;
     public bool spawnImmediate;
     public Vector3 immediateSpawnPos;
@@ -52,31 +52,89 @@ public class Parallaxer : MonoBehaviour {
     }
 
     void OnGameOverConfirmed () {
+        for (int i = 0; i < poolObjects.Length; i++) {
+            poolObjects[i].Dispose();
+            poolObjects[i].transform.position = Vector3.one * 1000;
+        }
         Configure();
     }
 
     void Update() {
+        if (game.GameOver) return;
 
+        Shift();
+        spawnTimer += Time.deltaTime;
+        if (spawnTimer > spawnRate) {
+            Spawn();
+            spawnTimer = 0;
+        }
     }
 
     void Configure() {
+        //spawning pool objects
+        targetAspect = targetAspectRatio.x / targetAspectRatio.y;
+        poolObjects = new PoolObject[poolSize];
+        for (int i = 0; i < poolObjects.Length; i++) {
+            GameObject go = Instantiate(Prefab) as GameObject;
+            Transform t = go.transform;
+            t.SetParent(transform);
+            t.position = Vector3.one * 1000;
+            poolObjects[i] = new PoolObject(t);
+        }
 
+        if (spawnImmediate) {
+            SpawnImmediate();
+        }
     }
 
     void Spawn() {
-
+        //moving pool objects into place
+        Transform t = GetPoolObject();
+        if (t == null) return; //if true, it indicates that poolSize is too small
+        Vector3 pos = Vector3.zero;
+        pos.y = Random.Range(myYSpawnRange.minY, myYSpawnRange.maxY);
+        pos.x = (defaultSpawnPos.x * Camera.main.aspect) / targetAspect;
+        t.position = pos;
     }
 
     void SpawnImmediate() {
-
+        Transform t = GetPoolObject();
+        if (t == null) return;
+        Vector3 pos = Vector3.zero;
+        pos.y = Random.Range(myYSpawnRange.minY, myYSpawnRange.maxY);
+        pos.x = (immediateSpawnPos.x * Camera.main.aspect) / targetAspect;
+        t.position = pos;
+        Spawn();
     }
 
     void Shift() {
-
+       //loop through pool objects and then putting them in motion
+       for (int i = 0; i < poolObjects.Length; i++) {
+            poolObjects[i].transform.position += Vector3.left
+                * shiftSpeed
+                * Time.deltaTime;
+            CheckDisposeObject(poolObjects[i]);
+        }
     }
 
     void CheckDisposeObject(PoolObject poolObject) {
-
+        if (poolObject.transform.position.x < (-defaultSpawnPos.x * Camera.main.aspect) / targetAspect) {
+            poolObject.Dispose();
+            poolObject.transform.position = Vector3.one * 1000;
+        }
     }
+
+    Transform GetPoolObject()
+    {
+        //retrieving first available pool object
+        for (int i = 0; i < poolObjects.Length; i++) {
+            if (!poolObjects[i].inUse) {
+                poolObjects[i].Use();
+                return poolObjects[i].transform;
+            }
+        }
+        return null;
+    }
+
 
 }
