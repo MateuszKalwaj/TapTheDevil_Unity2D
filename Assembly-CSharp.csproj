@@ -64,6 +64,9 @@
   <ItemGroup>
     <Compile Include="Assets\scripts\CountdownText.cs" />
     <Compile Include="Assets\scripts\GameManager.cs" />
+    <Compile Include="Assets\scripts\HighscoreText.cs" />
+    <Compile Include="Assets\scripts\Parallaxer.cs" />
+    <Compile Include="Assets\scripts\ScoreText.cs" />
     <Compile Include="Assets\scripts\TapController.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/Mateusz/Documents/UnityProjects/TapTheDevil/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
