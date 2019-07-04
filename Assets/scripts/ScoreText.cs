@@ -8,6 +8,6 @@ public class ScoreText : MonoBehaviour {
 
     private void Start() {
         score = GetComponent<Text>();
-        score.text = "Score: " + GameManager.Instance.Score;
+        //score.text = "Score: " + GameManager.Instance.Score;
     }
 }
