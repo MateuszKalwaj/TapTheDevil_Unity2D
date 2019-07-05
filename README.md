@@ -5,6 +5,6 @@ Tap The Devil is my first project written in C# using Unity engine. First versio
 and check responsive on android devices. <br>
 
 
-Feel free to download a game and try it by yourself!
+Feel free to download a game and try it by yourself! <br>
 https://play.google.com/store/apps/details?id=com.MateuszKalwaj.TapTheDevil
 
