@@ -5,17 +5,23 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
+  /*delegate jest podobny do pointerow z C, pozwala by metody były przekazywane jako parametry. 
+    jest typem zmiennej referencyjnej, która przechowuje referencję do obiektu. 
+    Służy do implemencji metod dotyczacych wydarzen (event) i odpowiedzi (call-back) do nich
+  */
     public delegate void GameDelegate();
     public static event GameDelegate OnGameStarted;
     public static event GameDelegate OnGameOverConfirmed;
 
-    public static GameManager Instance; //działa jak singleton. Bedzie odnośnikiem jako "this"
+    public static GameManager Instance; //działa jak singleton. Bedzie odnośnikiem jako "this". Jest potrzebny żeby mieć dostęp do instancji GameManager
 
+    //potrzebujemy poniższych referencji do stworzenia naszych "canvas" w Unity. Dzięki temu okreslamy stany gry (2)
     public GameObject startPage;
     public GameObject gameOverPage;
     public GameObject countdownPage;
     public Text scoreText;
 
+    //enum jest już dokładnie po to aby odczytywać stany gry (2)
     enum PageState
     {
         None,
@@ -24,14 +30,14 @@ public class GameManager : MonoBehaviour {
         GameOver
     }
 
-    int score = 0;
-    bool gameOver = true;
+    int score = 0; //wartość punktów (2)
+    bool gameOver = true; //początek gry i stan gameOver (2)
 
-    public bool GameOver { get { return gameOver; } }
-    public int Score { get { return score; } }
+    public bool GameOver { get { return gameOver; } } //taki zapis powoduje, że "gameOver" jest dostępny i widoczny, ale niemodyfikolwany (2)
+    public int Score { get { return score; } } //taka sama sytuacja jak wyżej
 
     void Awake() {
-        Instance = this;
+        Instance = this; //tutaj pojawia się pierwsze wywołanie instancji GameManager
     }
 
     void OnEnable() {
